@@ -3,5 +3,3 @@
 .idea/
 ./chroma_test
 ./documents_test
-*.xml
-*.iml
