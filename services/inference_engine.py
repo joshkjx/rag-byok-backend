@@ -28,7 +28,7 @@ class State(TypedDict):
 
 load_dotenv()
 
-SUPPORTED_PROVIDERS = ["anthropic"]
+SUPPORTED_PROVIDERS = ["anthropic", "openai"]
 
 GRADE_PROMPT = prompts.GRADE_PROMPT
 REWRITE_PROMPT = prompts.REWRITE_PROMPT
