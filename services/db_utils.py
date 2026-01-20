@@ -133,8 +133,8 @@ async def add_user_vectorstore(user_id: int, vectorstore_name: str, session: Asy
         await session.rollback()
         raise
 
-async def get_document_by_id(document_id: int, session: AsyncSession):
-    query = select(DocumentInfo).where(DocumentInfo.document_id == document_id)
+async def get_document_by_id(uid: int, document_id: int, session: AsyncSession):
+    query = select(DocumentInfo).where(DocumentInfo.document_id == document_id, DocumentInfo.user_id == uid)
     result = await session.execute(query)
     return result.scalar_one_or_none()
 

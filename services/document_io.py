@@ -4,6 +4,8 @@ from langchain_core.documents import Document
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import Depends, HTTPException, APIRouter, UploadFile, File, Form
 from services.file_management_utils import get_file_client, FileIOClient
+from pydantic import BaseModel
+import logging
 
 from services.doc_processing import load_and_split_uploaded_document
 from services.vectorstore import create_vectorstore, VStore
@@ -13,6 +15,10 @@ import services.auth_service as auth
 ACCEPTABLE_FILETYPES = ["application/pdf", "document/pdf"]
 
 router = APIRouter(prefix='/api/documents', tags=['document_utils'])
+logger = logging.getLogger("uvicorn.error")
+
+class DeleteDocumentRequest(BaseModel):
+    document_id: int
 
 @router.get('/get')
 async def get_user_docs(user = Depends(auth.get_current_user), db = Depends(db.get_db_session)): # Dependency injection should handle the cookie extraction
@@ -35,6 +41,20 @@ async def upload_new_document(user = Depends(auth.get_current_user),
         raise
 
     return upload_info
+
+@router.delete('/delete')
+async def delete_document(request:DeleteDocumentRequest,
+                          user = Depends(auth.get_current_user),
+                          db_session: AsyncSession = Depends(db.get_db_session),
+                          client: FileIOClient = Depends(get_file_client)):
+
+    document_id = request.document_id
+
+    await _delete_document(uid=user,
+                           document_id = document_id,
+                           db_session= db_session,
+                           client=client)
+    return {"success": True}
 
 async def get_user_vectorstore(user_id: int = None, db_session: AsyncSession = None) -> VStore:
     if not user_id:
@@ -95,7 +115,7 @@ async def _upload_document(uid:int, file: UploadFile, file_content_type: str, db
         for attempt in range(5): # For/Else retry loop in case non-unique doc_id
             uuid_value = uuid.uuid4()
             document_id: int = int(uuid_value) % 214748367 # we need to hash it to a 32bit integer so it plays nicely with db
-            existing = await db.get_document_by_id(document_id, db_session)
+            existing = await db.get_document_by_id(uid=uid,document_id=document_id,session=db_session)
             if not existing:
                 break
         else:
@@ -149,3 +169,31 @@ async def _upload_document(uid:int, file: UploadFile, file_content_type: str, db
 
     return {"filename": filename,
             "filetype": file_ext,}
+
+async def _delete_document(uid:int, document_id:int, db_session:AsyncSession, client: FileIOClient):
+    document = await db.get_document_by_id(uid, document_id, db_session)
+    if not document:
+        raise HTTPException(
+            status_code=404,
+            detail={
+                "message": "Document not found",
+                "error_code": "DOC_NOT_FOUND",
+            }
+        )
+
+    await db.delete_user_document(uid, document_id, db_session)
+
+    if client:
+        try:
+            await client.delete(document.storage_path)
+        except Exception as e:
+            logger.error(
+                f"Failed to delete document {document_id} due to {e}",
+                exc_info=True,
+                extra={
+                    "event_type": "storage_deletion_failed",
+                    "uid": uid,
+                    "document_id": document_id,
+                    "storage_path": document.storage_path,
+                }
+            )

@@ -98,7 +98,7 @@ uvicorn main:app --reload --host localhost --port 8000
 ### Documents
 - `GET /documents/get` - List user's documents
 - `POST /documents/upload` - Upload document for embedding and storage. If a record of the document already exists, the existing document is overwritten.
-- `POST /documents/delete` - Delete document - document ID expected in request body
+- `DELETE /documents/delete` - Delete document - document ID expected in request body
 
 ### RAG Query
 - `POST /query` - Submit query and receive streamed response from RAG agent
