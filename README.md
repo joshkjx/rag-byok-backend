@@ -88,7 +88,7 @@ uvicorn main:app --reload --host localhost --port 8000
 # API will be available at http://localhost:8000/api
 ```
 
-## 📡 API Endpoints
+## API Endpoints
 
 ### Authentication
 - `POST /auth/signup` - Create new user account
