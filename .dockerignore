@@ -1,0 +1,14 @@
+chroma_test/
+documents_test/
+.venv/
+.idea/
+*.sqlite
+.git
+.gitignore
+.env
+*.md
+*.pyc
+Dockerfile
+docker-compose.yaml
+.dockerignore
+*.tmp

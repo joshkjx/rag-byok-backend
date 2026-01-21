@@ -56,6 +56,8 @@ ChromaDB (vector storage)
 
 Python 3.11
 
+Docker
+
 PostgreSQL
 
 Cloud Storage access
@@ -64,28 +66,29 @@ OpenAI/Anthropic API keys
 
 ## Installation
 ```bash
-Clone the repository
+# Clone the repository
 git clone https://github.com/joshkjx/rag-byok-backend
 cd rag-byok-backend
 
-# Create virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install .
-
 # Set up environment variables
 cp .env.example .env
-# Edit .env with your configuration
+# Edit .env with your configuration before moving to the next step
+
+# build the image
+docker compose build
+
 ```
 
 ## Running the Application
 
 ### Start the server
 ```bash
-uvicorn main:app --reload --host localhost --port 8000
-# API will be available at http://localhost:8000/api
+# run the image
+docker compose up -d
+# API will be available at http://localhost:8080/api
+
+# To access logs:
+docker compose logs -f
 ```
 
 ## API Endpoints

@@ -3,10 +3,12 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from typing import List
 from langchain_core.documents import Document
 import pymupdf
+import os
 
 def initialise_embeddings_model(model_name:str):
-    # function wrapper so I can add more detailed functionality later if necessary
-    return HuggingFaceEmbeddings(model_name=model_name)
+    # Model will be downloaded to SENTENCE_TRANSFORMERS_HOME. Subsequent runs will use the cached model.
+    embeddings = HuggingFaceEmbeddings(model_name=model_name)
+    return embeddings
 
 def create_docs_from_bytes(content:bytes, source:str = "unknown", document_id: int = None) -> list[Document]:
     documents = []

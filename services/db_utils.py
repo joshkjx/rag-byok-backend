@@ -7,7 +7,10 @@ from sqlalchemy.ext.declarative import declarative_base
 from datetime import datetime
 
 DB_SESSION_URL = os.getenv("DB_SESSION_URL")
-engine = create_async_engine(DB_SESSION_URL, echo=True)
+engine = create_async_engine(DB_SESSION_URL, pool_pre_ping=False, echo=True, connect_args={
+        "prepared_statement_cache_size": 0,
+        "statement_cache_size": 0
+    })
 
 AsyncSessionFactory = async_sessionmaker(
     engine,

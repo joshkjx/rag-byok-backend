@@ -1,3 +1,4 @@
+import asyncio
 import os
 import uuid, json
 
@@ -11,6 +12,8 @@ from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
 from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
+
+from psycopg_pool import AsyncConnectionPool
 
 from services.dependencies.engine_manager import get_engine_manager
 from services.vectorstore import VStore
@@ -127,21 +130,45 @@ class InferenceEngine:
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         """Exit async context"""
-        if self.checkpointer:
+        if hasattr(self, 'pool'):
+            await self.pool.close()
+
+        if self.checkpointer and not hasattr(self, 'pool'):
             await self.checkpointer.__aexit__(exc_type, exc_val, exc_tb)
 
     async def _init_db(self, db_type: str = "sqlite", conn_string: str = "checkpoints.sqlite"):
         if db_type == "sqlite":
-            session = AsyncSqliteSaver.from_conn_string(conn_string)
+            session_cm = AsyncSqliteSaver.from_conn_string(conn_string)
+            return await session_cm.__aenter__()
 
         elif db_type == "postgres":
-            session = AsyncPostgresSaver.from_conn_string(conn_string)
+            self.pool = AsyncConnectionPool(
+                conninfo=conn_string,
+                max_size=5,
+                open=False,
+                kwargs={
+                    "prepare_threshold": None,
+                    "autocommit": True,
+                }
+            )
+            await self.pool.open()
+            session = AsyncPostgresSaver(self.pool)
+
+            try:
+                await asyncio.wait_for(session.setup(), timeout=60)
+            except asyncio.TimeoutError:
+                # This is the 'expected' error with Supabase poolers
+                logger.error("Warning: Database setup timed out. The tables might already exist or the pooler is slow.")
+                # We allow the app to continue here because setup() is idempotent, and if the tables are missing, the first query will fail loudly anyway.
+            except Exception as e:
+                # Net to prevent silent failure
+                print(f"Unexpected error during DB setup ({type(e).__name__}): {e}")
+                raise
+
+            return session
 
         else:
             raise ValueError(f"Unsupported database type: {db_type}")
-
-        await session.setup()
-        return session if session else None
 
     def init_model(self):
         if self.provider in SUPPORTED_PROVIDERS:

@@ -42,5 +42,3 @@ app.add_middleware(
 app.include_router(inference_engine.router)
 app.include_router(auth.router)
 app.include_router(docs.router)
-
-uvicorn.run(app, host="0.0.0.0", port=8000, log_level="info")
