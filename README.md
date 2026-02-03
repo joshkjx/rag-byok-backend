@@ -36,6 +36,8 @@ Driven by that experience, this project seeks to create a flexible broswer-based
 
 **Stateless Architecture**: Session state managed in conversation history for horizontal scaling
 
+
+
 # Tech Stack
 ## Core Framework:
 
