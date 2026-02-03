@@ -1,0 +1,187 @@
+[
+  {
+    "question": "How do societies of controll differ from disciplinary institutions in their practical mechanisms of managing individuals?",
+    "answer": "Societies of control differ from disciplinary institutions in fundamental ways. Disciplinary societies operated through enclosed spaces and institutions like hospitals, factories, schools, and prisons. These institutions were molds or distinct castings with a common analogical language. In contrast, societies of control operate through inseparable variations that form a system of variable geometry with a numerical language. Control mechanisms are modulations, like self-deforming casts that continuously change from one moment to another, or like sieves whose mesh transmutes from point to point. For example, in the factory system, workers were contained as a single body at an equilibrium level. However, in a society of control, the corporation has replaced the factory and operates as a spirit or gas, imposing modulation of each salary through states of perpetual metastability that operate via challenges, contests, and group sessions. This represents a shift from fixed institutional structures to continuous, fluid mechanisms of control that adapt and change constantly.",
+    "source": "ACADEMIA_deleuze_postscript.pdf"
+  },
+  {
+    "question": "Can you like explain to me what is disciplinary societies and how they are different from the societies of control, and what role do things like signatures and numbers play in disciplinary societies compared to codes in societies of control?",
+    "answer": "In disciplinary societies, there are two poles that define how power operates: the signature that designates the individual, and the number or administrative numeration that indicates his or her position within a mass. However, in the societies of control, what is important is no longer either a signature or a number, but a code. The code functions as a password, whereas disciplinary societies are regulated by watchwords. The numerical language of control is made of codes that mark access to information or reject it. In disciplinary societies, we find ourselves dealing with the mass/individual pair, but in societies of control, individuals have become \"dividuals,\" and masses have become samples, data, markets, or \"banks.\" Perhaps it is money that expresses the distinction between the two societies best, since discipline always referred back to minted money that locks gold in as numerical standard, while control relates to floating rates of exchange, modulated according to a rate established by a set of standard currencies. This represents a fundamental shift in how power and control operate in these two different types of social formations.",
+    "source": "ACADEMIA_deleuze_postscript.pdf"
+  },
+  {
+    "question": "How has marketing evolved as a central function within modern corporate structures?",
+    "answer": "Marketing has become the center or the \"soul\" of the corporation in contemporary capitalism. This represents a fundamental shift from nineteenth-century capitalism, which focused on production and property concentration through factory systems. In the present situation, capitalism is no longer primarily involved in production but rather in higher-order production and services. Marketing operates as the instrument through which corporations grab control of markets and fix exchange rates, transforming products to achieve market conquests.",
+    "source": "ACADEMIA_deleuze_postscript.pdf"
+  },
+  {
+    "question": "What happened to Watson's medical practice in Kensington?",
+    "answer": "Watson sold his small Kensington practice, which was subsequently purchased by a young doctor named Verner.",
+    "source": "NARRATIVE_Holmes-Adventure-of-Norwood-Builder.pdf"
+  },
+  {
+    "question": "Could you explain how transnationalism functions as an analytical concept in challenging traditional notions of national formation, and what specific problems does it address in relation to the way nations have historically been understood?",
+    "answer": "Transnationalism functions as an analytical concept that problematizes ideas about national formation by paying heed to the complex international circuitry of labour and commodities, as well as the attendant flows of culture and affect and the complicated affiliations and attachments forged in an unevenly globalized world, disrupting what is referred to as the tyranny of territorialism. This tyranny of territorialism has historically led to an emphasis on homogeneity and an ethnic core, and more often than not has violently excluded minority groups from the sign of the national. In this way, transnationalism offers an alternative epistemological framework that moves beyond the limitations of nation-based analysis and allows scholars to chart new paths of inquiry that recognize the nation as precarious, unmoored, and ultimately unrealizable.",
+    "source": "ACADEMIA_Performing NS in Singapore Angelia Poon.pdf"
+  },
+  {
+    "question": "How does the state exercise control over nation-building processes and what are the practical implications for citizens in postcolonial countries like Singapore?",
+    "answer": "In postcolonial countries like Singapore, the state plays a primary structuring force in nation-building by exercising juridicial power and the right to legitimate violence in the maintenance of social and economic order. The state constructs nation as a set of discourses, institutions and practices, functioning as a site of cultural and social production as well as a source of government. Importantly, the state yokes a version of nation to itself in order to authorize its forms of social control. This state-invested view of nation remains particularly significant in countries with a strong statist culture, where the nation cannot be meaningfully discussed without reference to state structures and power. The practical implications for citizens are substantial, as most people must negotiate this technology of state power in the course of their daily living, schooling and working.",
+    "source": "ACADEMIA_Performing NS in Singapore Angelia Poon.pdf"
+  },
+  {
+    "question": "How does the historical trajectory and ideological foundation of Indian nationalism, as characterized by its division of life into spiritual and material domains, contrast fundamentally with the constructed nature of Singaporean nationalism and its reliance on state apparatus for national identity formation?",
+    "answer": "According to the context, Indian nationalism, as explained in Partha Chatterjee's influential account, divided Indian life into \"spiritual\" and \"material\" domains, with a private inner space representing spirituality, tradition, and authenticity, and an outer public realm of technology, science, and statecraft. Crucially, the Indian nation was conceptualized as always already existing, waiting in the wings even before political independence, with national authenticity residing in the spiritual domain through notions of cultural tradition, family, and Indian women. In contrast, Singapore's nationhood was not assumed to exist prior to political formation; rather, it was thrust upon the nation, requiring it to \"swim or sink.\" Unlike Indian nationalism, which could draw upon an alternative vision of cultural and territorial sovereignty rooted in spiritual authenticity, no such assumption could easily attend Singaporean nationalism given the island's various conceptualizations as part of the Straits Settlements, a separate British colony, part of Malaysia, and finally an independent nation. Consequently, the Singaporean state, dominated by the People's Action Party since independence, has had to actively construct national identity through state apparatus and representational strategies, including education policies, state-sponsored spectacles such as National Day parades, public education messages, manipulation of space through public housing, and ideologies of multiracialism and heteronormativity, thereby producing knowledge about the nation through deliberate state intervention.",
+    "source": "ACADEMIA_Performing NS in Singapore Angelia Poon.pdf"
+  },
+  {
+    "question": "How literature and national consciousness is being used for challenging the state's official narratives, and what role do writers like performing in this process?",
+    "answer": "Literature provides a space for exploration of alternative imagined communities and narratives of resistance, operating contrapuntally against officially sanctioned history textbooks to unmask or excavate the past and thrust marginalized subjects centre-stage. Writers envision and discursively construct the nation in their work, particularly as they depict the practice of everyday life, which reveals human agency in the face of the state. Literature helps show the fractious and contingent nature of nation-formation that official history textbooks and state-sanctioned rhetoric of nationalism tend to gloss over. While literature may not present sustained and coherent visions or fully articulated alternatives, it remains powerfully suggestive through passing, sidelong glances and beginning utterances as a necessary step towards disrupting the state-established racial, spatial and historical paradigms for imagining the nation. Writers like Alfian Sa'at perform a kind of national service by addressing the political and cultural realities of life, representing an emerging generation of young writers whose consciousness shapes their engagement with these issues.",
+    "source": "ACADEMIA_Performing NS in Singapore Angelia Poon.pdf"
+  },
+  {
+    "question": "Why are machne failures so importent to consider in destributed systems?",
+    "answer": "Machine failures are critical to consider in distributed systems because with thousands of machines, some will almost always fail. Failures are the norm rather than the exception in distributed systems. Being able to tolerate faults is itself a fundamental motivation for distributed systems. This is particularly important because a poorly designed distributed system can have worse availability than a non-distributed system.",
+    "source": "EDU_lecture07-Fault-Tolerance.pdf"
+  },
+  {
+    "question": "What does it mean when node speed is guaranteed in a distributed system?",
+    "answer": "When node speed is guaranteed, it means that message delay is bounded and node speed is assured. In this scenario, if no acknowledgment is received after a timeout period, the system can determine that either the message was lost, the acknowledgment was lost, or the node is dead. However, if communication channels are reliable, one can know for certain that the node is dead.",
+    "source": "EDU_lecture07-Fault-Tolerance.pdf"
+  },
+  {
+    "question": "How does a heuristic funktion help guide the serch process in A* and GBFS planning algorithms?",
+    "answer": "A heuristic function estimates the cost from a state to the goal and guides node expansion to reduce the search space. In search-based planning paradigms like A* and GBFS, the explicit heuristic function plays a critical role by directing which nodes are expanded during the search process, thereby making the planning more efficient.",
+    "source": "EDU_Lecture-adv-classic v3.4.pdf"
+  },
+  {
+    "question": "How can I apply decisions under uncertainty in practical scenarios like robotics and logistics, and what framework should I use to handle sequential decisions made over time when the environment is stochastic and I need to optimize for long-term rewards?",
+    "answer": "Decisions under uncertainty involve making choices over time in stochastic environments where utility depends on the full action sequence. The Markov Decision Process (MDP) framework is one appropriate approach for handling such scenarios. MDPs are fully observable and designed to optimize long-term rewards. This framework has been successfully solved and applied in real-world domains including robotics, logistics, and games. Additionally, when dealing with unknown MDPs, you can learn to act effectively through feedback mechanisms, allowing you to adapt your decisions as you gain more information about the environment.",
+    "source": "EDU_Lecture-mdp.pdf"
+  },
+  {
+    "question": "How can I use learning from rewards to develop an optimal policy in an unfamiliar environment?",
+    "answer": "Learning from rewards involves using observed rewards to learn an optimal policy for an environment. In an unfamiliar environment where the reward function is unknown, you can apply this approach by treating the environment as a Markov Decision Process (MDP). By receiving percepts and occasional rewards, you can learn to behave appropriately and develop a policy that maximizes the expected total reward over time.",
+    "source": "EDU_Lecture-rl.pdf"
+  },
+  {
+    "question": "In the story, what happens to the maiden after the King places her in progressively larger rooms filled with straw, and what does she have to offer the Dwarf in exchange for his help with spinning the straw into gold?",
+    "answer": "She is commanded to spin the straw into gold during the night, with increasingly high stakes: first to save her life, then with the promise that if she succeeds she will become the King's bride. In exchange for the Dwarf's assistance, the maiden first offers the ring off her finger, which he accepts and uses to spin the straw into gold. When placed in the third room, the maiden has nothing left to give, so the Dwarf asks her to promise him her first-born child if she becomes Queen. The maiden, uncertain about whether this will ever come to pass, considers this proposition.",
+    "source": "NARRATIVE_Grimm-Rumpelstiltskin.pdf"
+  },
+  {
+    "question": "What did the King ask the Miller's daughter to do at the castel in the morning?",
+    "answer": "The King asked the Miller's daughter to come to the castle in the morning, where he led her into a chamber filled with straw. He gave her a wheel and a reel, and instructed her to spin the straw into gold by an early hour the next morning, warning her that she must die if she failed to complete this task.",
+    "source": "NARRATIVE_Grimm-Rumpelstiltskin.pdf"
+  },
+  {
+    "question": "What was the King's primary motivation for repeatedly demanding that the maiden spin straw into gold?",
+    "answer": "The King's primary motivation was covetousness and the desire to acquire wealth. Upon seeing the gold that the maiden had spun, the sight gladdened him, but it did not make his heart less covetous. He was not satisfied with the gold from the first room, so he led the maiden to a second, larger room full of straw and demanded she spin it into gold during the night. When she succeeded again, the King was rejoiced above measure at the sight of the gold, but still he was not satisfied. He then led her to a third, even larger room full of straw and demanded she spin it during the night, with the promise that if she accomplished it, she would become his bride. The King's reasoning was that a richer wife could not be found in all the world, demonstrating that his desire for wealth and a wealthy spouse drove his repeated demands.",
+    "source": "NARRATIVE_Grimm-Rumpelstiltskin.pdf"
+  },
+  {
+    "question": "Could you explain the nature of Sherlock Holmes's character, particularly regarding his attitude toward public recognition?",
+    "answer": "Sherlock Holmes possessed a cold and proud nature that was averse to public applause and recognition. He was so opposed to publicity that he bound his companion in stringent terms, prohibiting him from speaking further about Holmes himself, his methods, or his successes. Additionally, Holmes maintained a composed demeanor even during moments of leisure, as shown when he was leisurely unfolding his morning paper in his chair, demonstrating his characteristic calm and measured approach to life.",
+    "source": "NARRATIVE_Holmes-Adventure-of-Norwood-Builder.pdf"
+  },
+  {
+    "question": "Who is C. Auguste Dupin and what is his role in the narrative?",
+    "answer": "C. Auguste Dupin is a character who resides in a little back library or book-closet on the third floor at No. 33, Rue Dun\u00f4t, in the Faubourg St. Germain district of Paris. He is the friend and companion of the narrator, and he is consulted by Monsieur G\u2014\u2014, the Prefect of the Parisian police, for his opinion on official police matters. Dupin has previously been involved in investigating significant cases, including the affair of the Rue Morgue and the mystery attending the murder of Marie Rog\u00eat.",
+    "source": "NARRATIVE_Poe-The-Purloined-Letter.pdf"
+  },
+  {
+    "question": "Why was the document stolen from the royal apartments considered important?",
+    "answer": "The document is valuable because its disclosure to a third person would bring into question the honor of a personage of most exalted station. This gives the holder of the document an ascendancy over the illustrious personage whose honor and peace are jeopardized. The document provides its holder with a certain power in a certain quarter where such power is immensely valuable.",
+    "source": "NARRATIVE_Poe-The-Purloined-Letter.pdf"
+  },
+  {
+    "question": "How did the Minister D\u2014\u2014 sucessfully obtain the stolen document through his ingenious method?",
+    "answer": "When he entered the royal boudoir, his keen eye immediately perceived the letter on the table, recognized the handwriting of the address, and understood the secret it contained. He then produced a letter similar to the one in question, opened it, pretended to read it, and placed it in close proximity to the original letter. After conversing for approximately fifteen minutes about public affairs, he took his leave and simultaneously took the letter to which he had no rightful claim from the table. The rightful owner witnessed this act but dared not call attention to it in the presence of a third personage who stood nearby. The Minister D\u2014\u2014 then decamped, leaving his own letter in place of the one he had stolen.",
+    "source": "NARRATIVE_Poe-The-Purloined-Letter.pdf"
+  },
+  {
+    "question": "Who is the Prefect of the Parisian polise that visits Dupin and the narrator?",
+    "answer": "Monsieur G\u2014\u2014, the Prefect of the Parisian police, is the official who visits the narrator and C. Auguste Dupin in Dupin's back library.",
+    "source": "NARRATIVE_Poe-The-Purloined-Letter.pdf"
+  },
+  {
+    "question": "What are the specific provisions and restrictions contained within the current funding laws that are set to expire, and what consequences would result from their expiration?",
+    "answer": "The existing funding package under current funding laws would allocate $10 billion for ICE, maintaining similar funding levels to previous years. The legislation includes limited restrictions on the agency that Democrats secured through earlier negotiations, specifically comprising a decrease in detention beds, reduced funding for Border Patrol and for ICE's enforcement and removal operations, and $20 million allocated for body cameras for ICE and Border Patrol agents. However, it does not include additional changes that Democrats had sought, such as prohibitions on ICE agents from shooting at moving vehicles or detaining U.S. citizens. The Homeland Security funding is attached to five other measures that would fund vast portions of the federal government, including the Defense Department and the Department of Health and Human Services. If the funding laws expire before 12:01 a.m. Saturday, all work at these agencies that is not deemed essential to protect public safety, national security, or government property would cease, resulting in a government shutdown.",
+    "source": "NEWS_WP_ICE-funding-shutdown.pdf"
+  },
+  {
+    "question": "What is the position of Senate Republicans regarding the splitting of the Homeland Security bill from other appropriations bills that the Senate is considering?",
+    "answer": "Senate Republicans do not want to split the Homeland Security bill off from five other appropriations bills that the Senate is set to consider as a package. Some Senate Republicans are opposed to making concessions on the existing measure. Any changes to the existing measure would require sending it back to the House, which is not scheduled to return until Monday, after a shutdown would start.",
+    "source": "NEWS_WP_ICE-funding-shutdown.pdf"
+  },
+  {
+    "question": "What specific reforms are Senate Democrats demanding regarding the Department of Homeland Security?",
+    "answer": "Senate Democrats have unveiled three main goals they are demanding as reforms to the Department of Homeland Security. First, they want to end \"roving patrols\" by requiring warrants in some cases and requiring U.S. Immigration and Customs Enforcement to coordinate with state and local law enforcement. Second, they are demanding the creation of a uniform code of conduct for agents with independent investigations to enforce it. Third, they require agents to wear body cameras and not to wear certain items. Senate Minority Leader Charles E. Schumer characterized these as \"common sense reforms\" and stated that Democrats will be demanding \"legislative solutions\" rather than executive orders to implement these changes.",
+    "source": "NEWS_WP_ICE-funding-shutdown.pdf"
+  },
+  {
+    "question": "What agencies would be affected if the funding package don't pass before the deadline?",
+    "answer": "The Homeland Security funding is attached to five other measures that would fund vast swaths of the federal government, including the Defense Department and the Department of Health and Human Services. If the funding does not pass, all work at these agencies that is not deemed essential to protect public safety, national security or government property would stop.",
+    "source": "NEWS_WP_ICE-funding-shutdown.pdf"
+  },
+  {
+    "question": "What specific legal challenges has Trump encountered regarding the deployment of National Guard troops, and what are the practical cost implications that must be considered when implementing such deployments across multiple U.S. cities?",
+    "answer": "The deployments have been repeatedly challenged in court, and legal experts have warned that Trump may be exceeding constitutional authority. From a practical implementation perspective, the budget office estimated that maintaining deployments nationwide at the same capacity and size as those at the end of 2025 would cost the government approximately $21 million per month, depending largely on local cost-of-living variations. The office noted that it is difficult to predict further costs because of variations in deployment size, duration, location, and legal or policy considerations. However, practitioners should be aware that certain locations present fewer legal challenges; for example, because of D.C.'s unique legal status, deploying Guard troops there can be done with more authority and without the same level of legal challenge that deployments to other cities may face.",
+    "source": "NEWS_WP_National-Guard-Deployments.pdf"
+  },
+  {
+    "question": "What autority did Pete Hegseth recieve regarding the deployment of National Gaurd troops in Memfis?",
+    "answer": "In September, Trump authorized Defense Secretary Pete Hegseth to call the National Guard into Memphis, activating about 1,500 members. The context does not provide additional details about the specific scope or limitations of this authority beyond this authorization to activate National Guard troops for the Memphis deployment.",
+    "source": "NEWS_WP_National-Guard-Deployments.pdf"
+  },
+  {
+    "question": "What is the locaton of the Minneaplis neighborhood where Renee Good was killed?",
+    "answer": "The Minneapolis neighborhood where Renee Good was killed is located at 34th and Portland, a little over half a mile away from where George Floyd was murdered by Officer Derek Chauvin in 2020.",
+    "source": "OPED_TIME_Why-Minneapolis-fears-ice.pdf"
+  },
+  {
+    "question": "What is the geographical and social significance of the Minneapolis neighborhood where Renee Good was killed, and how does its location relate to other notable sites of violence and community spaces in the area?",
+    "answer": "The Minneapolis neighborhood in question is located at the intersection of 34th and Portland, positioned just over half a mile away from where George Floyd was murdered by Officer Derek Chauvin in 2020. This neighborhood is characterized by its proximity to several significant community spaces and sites of historical violence. Additionally, two blocks from this center, community activists have painted names of Minnesotans and others who have lost their lives to state-sanctioned violence, including individuals such as Jamar Clark and Philando. The neighborhood is also situated approximately three and a half miles from Annunciation Catholic School, where a mass shooting occurred that injured 17 people and killed two children. This Minneapolis neighborhood thus represents a region marked by both community resilience through its educational and recreational facilities and a tragic history of state-sanctioned violence and mass violence incidents.",
+    "source": "OPED_TIME_Why-Minneapolis-fears-ice.pdf"
+  },
+  {
+    "question": "How does racial profiling by ICE agents impact communities, and what specific examples demonstrate this practice affecting different demographic groups in the United States?",
+    "answer": "According to the context, racial profiling by ICE agents has created widespread fear and harm across multiple communities. The majority of people being accosted and disappeared are Black, Muslim, Latinx, and Asian individuals. The context describes specific impacts: Native American citizens have been detained by ICE agents who do not recognize tribal IDs, and many community members are afraid to leave their homes for mundane activities like getting groceries or shoveling snow. The narrator personally carries three forms of identification when leaving the house due to fear that the color of their skin and shape of their eyes puts them at risk. These examples illustrate how racial profiling by ICE has created a climate of fear and vulnerability among communities of color, affecting their ability to move freely and safely in their own neighborhoods and country.",
+    "source": "OPED_TIME_Why-Minneapolis-fears-ice.pdf"
+  },
+  {
+    "question": "What is the Dead or Alive francise and witch company owns it?",
+    "answer": "Dead or Alive is one of the flagship franchises owned by Koei Tecmo Games, a video game developer and publisher that is part of Koei Tecmo Holdings Co., Ltd. Koei Tecmo Games has been the owner of the Dead or Alive franchise since 2010, when it acquired the previous Koei and Tecmo franchises following the 2009 merger that created the holding company.",
+    "source": "WIKIPEDIA_Koei_Tecmo.pdf"
+  },
+  {
+    "question": "What was Koei Co., Ltd. and how did it evolve from its founding to establishing international operations?",
+    "answer": "Koei Co., Ltd. was founded in July 1978 by husband-and-wife duo Y\u014dichi and Keiko Erikawa. Y\u014dichi, a Keio University student, decided to pursue programming after his family's rural dyestuffs business failed. The company was located in the Hiyoshi area of Yokohama near Y\u014dichi's alma mater, with its name being a spoonerism. Initially, Koei focused on personal computer sales and made-to-order business software. In 1983, the company released Nobunaga's Ambition, a historical strategy game set during Japan's Sengoku period, which received numerous awards and led to the development of other historically-themed games such as Romance of the Three Kingdoms and Uncharted Waters. To expand internationally, Koei established a North American subsidiary, Koei Corporation, in California in 1988, which localized games for export and produced original games under designer Stieg Hedlund. After Hedlund's departure, this subsidiary ceased game development in 1995 and focused on localization, sales, and marketing. The company further expanded by establishing a Canadian subsidiary, Koei Canada, Inc., in early 2001, and a European subsidiary, Koei Limited, in early 2003 in Hertfordshire, United Kingdom.",
+    "source": "WIKIPEDIA_Koei_Tecmo.pdf"
+  },
+  {
+    "question": "What was the plan for internashional subsidaries restructure announced by Tecmo Koei?",
+    "answer": "On June 23, 2009, Tecmo Koei announced a planned restructure of its international subsidiaries. This restructuring involved several key changes: Koei Europe was renamed Tecmo Koei Europe in 2009 and became the first subsidiary to publish games under the new moniker. In August 2009, Tecmo Koei set up a subsidiary in Hanoi, Vietnam. In January 2010, Tecmo's American subsidiary Tecmo Inc. and Koei's American branch Koei Corporation were consolidated under a newly formed Tecmo Koei America Corporation, which became a direct subsidiary of Tecmo Koei Holdings. Additionally, Koei's Canadian, Korean, and Taiwanese subsidiaries were re-branded as Tecmo Koei and moved to direct subsidiaries of the holding company. Koei Singapore was also re-branded as Tecmo Koei during this restructuring period.",
+    "source": "WIKIPEDIA_Koei_Tecmo.pdf"
+  },
+  {
+    "question": "What were the main events and consequences that happened during the Watergate scandal, and how did it involve President Nixon's administration and ultimately lead to his resignation?",
+    "answer": "The Watergate scandal was a political scandal in the United States involving the administration of President Richard Nixon. On June 17, 1972, operatives associated with Nixon's 1972 re-election campaign broke into the Democratic National Committee headquarters at Washington, D.C.'s Watergate complex. The break-in was an implementation of Operation Gemstone, enacted by mostly Cuban burglars led by former intelligence agents E. Howard Hunt and G. Gordon Liddy. After their arrests, investigators and reporters like The Washington Post's Bob Woodward and Carl Bernstein\u2014guided by the leaker \"Deep Throat\"\u2014exposed a White House political espionage program illegally funded by donor contributions. Nixon denied involvement, but his administration destroyed evidence, obstructed investigators, and bribed the burglars. The cover-up initially worked, helping Nixon win a landslide re-election, until revelations from the burglars' 1973 trial emerged. Attorney General Elliot Richardson appointed Archibald Cox as Watergate special prosecutor. Cox subpoenaed Nixon's Oval Office tapes, but Nixon invoked executive privilege to block their release, triggering a constitutional crisis. In the \"Saturday Night Massacre\", Nixon fired Cox, forcing the resignations of the attorney general and his deputy. Nixon released select tapes, although one was partially erased and two others disappeared. In July 1974, the Supreme Court ordered the tapes' release, and the House Judiciary Committee recommended impeachment for obstructing justice, abuse of power, and contempt of Congress. The White House released the \"Smoking Gun\" tape, showing that Nixon ordered the CIA to stop the FBI's investigation. Facing impeachment, on August 9, 1974, Nixon became the first U.S. president to resign. In total, 69 people were charged for Watergate, and most pleaded guilty or were convicted. The scandal tarnished Nixon's legacy and had electoral ramifications for the Republican Party, including heavy losses in the 1974 midterm elections.",
+    "source": "WIKIPEDIA_Watergate_scandal.pdf"
+  },
+  {
+    "question": "What happend when the Pentegon Papres were publised by the New York Times?",
+    "answer": "When The New York Times started publishing the Pentagon Papers in June 1971, a leaked 7,000-page study of U.S. involvement in Vietnam that exposed government deception about the war's progress, Nixon initially was unworried since the papers predated his presidency. However, National Security Advisor Henry Kissinger pushed Nixon into a frenzy. Attorney General John Mitchell filed a restraining order against the Times to halt publication, but The Washington Post began publishing the papers instead. The case traveled to the Supreme Court, which ruled against Nixon, making the episode what journalist Garrett Graff called a self-inflicted disaster.",
+    "source": "WIKIPEDIA_Watergate_scandal.pdf"
+  },
+  {
+    "question": "So like, what was E. Howard Hunt doing exactly when he got recruited for all these operations and what kind of experience did he bring to the table that made him useful for the Plumbers and all the other stuff they was planning?",
+    "answer": "E. Howard Hunt was a retired Central Intelligence Agency (CIA) agent who was recruited by Chuck Colson for the Brookings burglary. Hunt had significant experience from his previous CIA work, having helped arrange the 1954 Guatemalan coup d'\u00e9tat and the failed 1961 Bay of Pigs Invasion of Cuba. He was teamed with aides Egil Krogh and David Young in the \"Special Investigations Unit\" and worked with former FBI agent G. Gordon Liddy. Hunt enlisted Cuban collaborators from the Bay of Pigs, including CIA veteran Bernard Barker and anti-Castro exiles Eugenio Mart\u00ednez and Felipe De Diego. He was involved in planning the burglary of psychiatrist Lewis Fielding's Los Angeles office to seek compromising material on Daniel Ellsberg, and he and Liddy also planned to burglarize Fielding's home. Hunt's background in covert operations and his connections to Cuban operatives made him a key operative in the Plumbers' various schemes.",
+    "source": "WIKIPEDIA_Watergate_scandal.pdf"
+  },
+  {
+    "question": "What was the Democratic National Committee's role in the Watergate scandal?",
+    "answer": "The Democratic National Committee headquarters at Washington, D.C.'s Watergate complex was the target of a break-in on June 17, 1972, by operatives associated with Nixon's 1972 re-election campaign. The break-in was an implementation of Operation Gemstone, enacted by mostly Cuban burglars led by former intelligence agents E. Howard Hunt and G. Gordon Liddy. This break-in at the Democratic National Committee headquarters became the central event that triggered the Watergate scandal, which ultimately led to President Richard Nixon's resignation.",
+    "source": "WIKIPEDIA_Watergate_scandal.pdf"
+  }
+]

@@ -36,4 +36,5 @@ dependencies = [
     "langchain-openai>=1.1.7",
     "langchain-google-vertexai>=3.2.1",
     "psycopg-pool>=3.3.0",
+    "slowapi>=0.1.9",
 ]

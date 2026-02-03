@@ -127,6 +127,11 @@ async def retrieve_user_vectorstore_ids(userid: int, session: AsyncSession):
     result = await session.execute(query)
     return result.scalars().all()
 
+async def delete_refresh_token(uid:int, session: AsyncSession):
+    stmt = delete(RefreshToken).where(RefreshToken.user_id == uid)
+    await session.execute(stmt)
+    await session.commit()
+
 async def add_user_vectorstore(user_id: int, vectorstore_name: str, session: AsyncSession):
     col_entry = VectorDB(user_id=user_id, collection_name=vectorstore_name)
     session.add(col_entry)

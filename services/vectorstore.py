@@ -57,7 +57,7 @@ class VStore:
         """
         grabs the collection and sets it as a retriever
         """
-        return self.collection.as_retriever()
+        return self.collection.as_retriever(search_type="similarity",search_kwargs={'k': 3})
 
     async def update_collection_with_splits(self,splits:List[Document], doc_id: int):
         """

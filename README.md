@@ -1,6 +1,6 @@
 # RAG Document Assistant - Backend
 
-A production-ready Retrieval-Augmented Generation (RAG) application backend that enables users to query their documents using their own LLM API keys, built with an agentic AI workflow and cloud storage integration.
+A production-ready Retrieval-Augmented Generation (RAG) application backend that enables users to query their documents using their own LLM API keys, built with an agentic AI workflow and cloud storage integration. The project is deployed [here](https://rag.joshkjx.com). Signups currently disabled, but demo credentials available on request.
 
 # Motivation
 
@@ -114,4 +114,4 @@ docker compose logs -f
 
 # Project Status
 
-This project is actively maintained and deployed as a demo application. It was built as a learning project to explore agentic AI deployment, cloud infrastructure, and production-grade API development.
+This project is actively maintained and deployed as a demo application. It was built as a learning project to explore agentic AI deployment, cloud infrastructure, and production-grade API development. 

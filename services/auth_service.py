@@ -2,7 +2,9 @@ from datetime import timedelta, datetime, UTC
 import os
 from typing import Optional, Tuple
 from pydantic import BaseModel
-from fastapi import HTTPException, APIRouter, Depends, Response, Cookie
+from fastapi import HTTPException, APIRouter, Depends, Response, Cookie, Request
+from services.dependencies.rate_limiter import limiter
+
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 import jwt
@@ -13,6 +15,8 @@ import services.db_utils as db
 
 pw_hasher = PasswordHash.recommended()
 JWT_SECRET = os.getenv("JWT_SECRET")
+SAME_SITE_SETTING = 'none' if not os.getenv('SITE_DOMAIN') else 'lax'
+
 
 class LoginRequest(BaseModel):
     username: str
@@ -21,25 +25,93 @@ class LoginRequest(BaseModel):
 router = APIRouter(prefix='/api/auth', tags=['auth'])
 logger = logging.getLogger("uvicorn.error")
 
+async def get_current_user(access_token: Optional[str] = Cookie(None)) -> int:
+    """
+    Extracts access token from cookie and attempts to decode it. Returns user ID on success.
+    :param access_token: Dependency that extracts cookie from header (Dependency Injection upstream)
+    :return: (int) user id corresponding to access token
+    """
+    if not access_token:
+        logger.log(logging.INFO, "NO ACCESS TOKEN PROVIDED")
+        raise HTTPException(status_code=401, detail={
+            "message": "No access token provided",
+            "error_code": "ACCESS_TOKEN_ABSENT"
+        })
+
+    try:
+        payload = jwt.decode(access_token, JWT_SECRET, algorithms=["HS256"])
+        user_id = payload.get("user_id")
+        token_type = payload.get("type")
+        username = payload.get("username")
+        if token_type != "access":
+            raise HTTPException(status_code=401, detail={
+                "message": "Invalid token type",
+                "error_code": "TOKEN_TYPE_MISMATCH"
+            })
+        if user_id is None:
+            raise HTTPException(status_code=401, detail={
+                "message": "Invalid Token provided",
+                "error_code": "INVALID_TOKEN"
+            })
+        return user_id
+
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(status_code=401, detail={
+            "message": "Token Expired",
+            "error_code": "TOKEN_EXPIRED"
+        })
+
 @router.post('/login')
-async def login(request: LoginRequest, response:Response, db: AsyncSession = Depends(db.get_db_session)):
-    access, refresh = await handle_login(request, db)
+@limiter.limit("30/minute")
+async def login(request:Request, loginreq: LoginRequest, response:Response, db: AsyncSession = Depends(db.get_db_session)):
+    access, refresh = await handle_login(loginreq, db)
     response.set_cookie('access_token',
                         value = access,
                         httponly=True,
                         secure=True,
-                        samesite='lax',
+                        samesite=SAME_SITE_SETTING,
                         path="/")
     response.set_cookie('refresh_token',
                         value = refresh,
                         httponly=True,
                         secure=True,
-                        samesite='lax',
+                        samesite=SAME_SITE_SETTING,
                         path="/api/auth")
     return {"message": "Login success"}
 
+@router.post('/logout')
+@limiter.limit("30/minute")
+async def logout(request: Request, response: Response, user:int =  Depends(get_current_user), db: AsyncSession = Depends(db.get_db_session)):
+    response.set_cookie('access_token',
+                        value="",
+                        max_age=0,
+                        httponly=True,
+                        secure=True,
+                        samesite=SAME_SITE_SETTING,
+                        path="/")
+    response.set_cookie('refresh_token',
+                        value="",
+                        max_age=0,
+                        httponly=True,
+                        secure=True,
+                        samesite=SAME_SITE_SETTING,
+                        path="/api/auth")
+
+    retry_count = 0
+    invalidated = False
+    while retry_count < 4:
+        invalidated = await invalidate_refresh_token(user, db)
+        if invalidated:
+            break
+        else:
+            retry_count += 1
+
+    return {"message": "Logout success"} if invalidated else {"message": "Logout failed"}
+
 @router.post('/refresh')
-async def refresh(response: Response,
+@limiter.limit("10/minute")
+async def refresh(request: Request,
+                  response: Response,
                   refresh_token: Optional[str] = Cookie(None),
                   db: AsyncSession = Depends(db.get_db_session)):
     if not refresh_token:
@@ -86,35 +158,37 @@ async def refresh(response: Response,
                         value = new_access,
                         httponly=True,
                         secure=True,
-                        samesite='lax',)
+                        samesite=SAME_SITE_SETTING,)
 
     return {"message": "Token refreshed successfully",
             "username": username,}
 
-@router.post('/signup')
-async def signup(request: LoginRequest, response: Response, db: AsyncSession = Depends(db.get_db_session)):
-    username = request.username
-    password = request.password
-    new_user = await create_user(username=username, password=password, db_session=db)
-    access, refresh = await handle_login(request, db)
+if os.getenv("SIGNUPS_ENABLED", "false").lower() == "true":
+    @router.post('/signup')
+    @limiter.limit("30/day")
+    async def signup(request:Request, loginreq: LoginRequest, response: Response, db: AsyncSession = Depends(db.get_db_session)):
+        username = loginreq.username
+        password = loginreq.password
+        new_user = await create_user(username=username, password=password, db_session=db)
+        access, refresh = await handle_login(loginreq, db)
 
-    response.set_cookie('access_token',
-                        value = access,
-                        httponly=True,
-                        secure=True,
-                        samesite='lax',
-                        path="/")
-    response.set_cookie('refresh_token',
-                        value = refresh,
-                        httponly=True,
-                        secure=True,
-                        samesite='lax',
-                        path="/api/auth")
+        response.set_cookie('access_token',
+                            value = access,
+                            httponly=True,
+                            secure=True,
+                            samesite=SAME_SITE_SETTING,
+                            path="/")
+        response.set_cookie('refresh_token',
+                            value = refresh,
+                            httponly=True,
+                            secure=True,
+                            samesite=SAME_SITE_SETTING,
+                            path="/api/auth")
 
-    return {"message": "Signup success",
-            "user":{
-                "username": new_user.username,
-            }}
+        return {"message": "Signup success",
+                "user":{
+                    "username": new_user.username,
+                }}
 
 
 async def _retrieve_user(username: str, db_session: AsyncSession) -> db.User | None:
@@ -211,6 +285,10 @@ async def validate_refresh_token(user_id: int, token: str, db_session: AsyncSess
         return False
     return True
 
+async def invalidate_refresh_token(user_id: int, db_session: AsyncSession) -> bool:
+    success = await db.delete_refresh_token(user_id, db_session)
+    return bool(success)
+
 async def create_user(username: str, password: str, db_session: AsyncSession) -> db.User:
     hashed_password = hash_password(password)
     try:
@@ -234,40 +312,3 @@ async def create_user(username: str, password: str, db_session: AsyncSession) ->
 async def retrieve_uid_from_token(token: str) -> int:
     decoded = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
     return decoded.get("user_id")
-
-
-async def get_current_user(access_token: Optional[str] = Cookie(None)) -> int:
-    """
-    Extracts access token from cookie and attempts to decode it. Returns user ID on success.
-    :param access_token: Dependency that extracts cookie from header (Dependency Injection upstream)
-    :return: (int) user id corresponding to access token
-    """
-    if not access_token:
-        logger.log(logging.INFO, "NO ACCESS TOKEN PROVIDED")
-        raise HTTPException(status_code=401, detail={
-            "message": "No access token provided",
-            "error_code": "ACCESS_TOKEN_ABSENT"
-        })
-
-    try:
-        payload = jwt.decode(access_token, JWT_SECRET, algorithms=["HS256"])
-        user_id = payload.get("user_id")
-        token_type = payload.get("type")
-        username = payload.get("username")
-        if token_type != "access":
-            raise HTTPException(status_code=401, detail={
-                "message": "Invalid token type",
-                "error_code": "TOKEN_TYPE_MISMATCH"
-            })
-        if user_id is None:
-            raise HTTPException(status_code=401, detail={
-                "message": "Invalid Token provided",
-                "error_code": "INVALID_TOKEN"
-            })
-        return user_id
-
-    except jwt.ExpiredSignatureError:
-        raise HTTPException(status_code=401, detail={
-            "message": "Token Expired",
-            "error_code": "TOKEN_EXPIRED"
-        })

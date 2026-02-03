@@ -16,6 +16,7 @@ services:
 
   app:
     container_name: rag-byok-backend
+    image: joshkjx/rag-byok-backend
     build: .
     dns:
       - 8.8.8.8
@@ -36,4 +37,4 @@ services:
         condition: service_started
     volumes:
       - hf_models:/models/huggingface
-    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "4"]
+    command: ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8080", "--workers", "1"]

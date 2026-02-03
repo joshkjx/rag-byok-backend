@@ -5,13 +5,15 @@ import uuid, json
 from dotenv import load_dotenv
 from langgraph.graph import StateGraph,add_messages,START,END
 from langchain.chat_models import init_chat_model
-from langchain_core.tools import StructuredTool
-from langchain_core.messages import HumanMessage, ToolMessage, message_to_dict, messages_to_dict
+from langchain_core.tools import tool
+from langchain_core.messages import HumanMessage, ToolMessage, message_to_dict, messages_to_dict, AIMessage
+from langchain_core.documents import Document
 from langgraph.prebuilt import ToolNode, tools_condition
 from langgraph.checkpoint.sqlite.aio import AsyncSqliteSaver
 from langgraph.checkpoint.postgres.aio import AsyncPostgresSaver
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Request
 from fastapi.responses import StreamingResponse
+from services.dependencies.rate_limiter import limiter
 
 from psycopg_pool import AsyncConnectionPool
 
@@ -21,13 +23,15 @@ import services.assets.prompts as prompts
 import services.auth_service as auth
 import services.db_utils as db
 from pydantic import BaseModel,Field
-from typing import Literal, Annotated, Tuple, Optional
+from typing import Literal, Annotated, Tuple, Optional, List
 from typing_extensions import TypedDict
 
 import logging
 
 class State(TypedDict):
     messages: Annotated[list, add_messages]
+    documents: List[Document]
+    rewrite_count: int
 
 load_dotenv()
 
@@ -54,7 +58,9 @@ class InferenceRequest(BaseModel):
     conversation_state:State | None = None
 
 @router.post("/query")
-async def query(query_req: InferenceRequest,
+@limiter.limit("30/minute")
+async def query(request:Request,
+                query_req: InferenceRequest,
                 user_id: int = Depends(auth.get_current_user),
                 db_session = Depends(db.get_db_session),
                 engine_manager = Depends(get_engine_manager)):
@@ -107,18 +113,12 @@ class InferenceEngine:
         self.response_model = self.init_model()
         self.grader_model = self.init_model()
 
-
-        self.retrieve_tool = StructuredTool.from_function(
-            func = lambda query: self._retrieve_documents(query),
-            name = "retrieve_documents",
-            description = "Search the document database for relevant information."
-        )
-
         # Set up checkpointer variables
         self.db_type = os.getenv('CHECKPOINTER_DB_TYPE')
         self.db_conn_string = os.getenv('CHECKPOINTER_DB_CONN_STRING')
         self.checkpointer = None
         self.graph = None
+        self._define_retriever()
 
     async def __aenter__(self):
         """Enter async context"""
@@ -182,9 +182,23 @@ class InferenceEngine:
             print("Provider not supported.")
             raise NotImplementedError
 
-    def _retrieve_documents(self, query:str):
-        docs = self.retriever.invoke(query)
-        return "\n".join([doc.page_content for doc in docs])
+    def retrieve_tool(self, state:State) -> State:
+        ai_message = [m for m in state["messages"] if isinstance(m, AIMessage) and m.tool_calls][-1]
+        q = ai_message.tool_calls[0]["args"]["query"]
+
+        docs = self.retriever.invoke(q)
+        context = "\n".join([doc.page_content for doc in docs])
+
+        tool_messages = [
+            ToolMessage(content=context, tool_call_id=tool_call["id"])
+            for tool_call in ai_message.tool_calls
+        ] # Some models make multiple parallel tool calls
+
+        return {
+            "messages": tool_messages,
+            "documents": docs,
+            "rewrite_count": state.get("rewrite_count", 0),
+        }
 
     def _build_conversation_state(self, message:str, conversation_state:Optional[State]=None) -> State:
         """
@@ -194,7 +208,7 @@ class InferenceEngine:
             state = conversation_state.copy()
             state["messages"].append(HumanMessage(content=message))
         else:
-            state = State(messages=[HumanMessage(content=message)])
+            state = State(messages=[HumanMessage(content=message)], documents=[], rewrite_count=0)
         return state
 
     def query(self, message: str, conversation_state: Optional[State]=None, thread_id: str = None):
@@ -213,6 +227,15 @@ class InferenceEngine:
             "type": "final_state",
             "thread_id": thread_id,
             "messages": result["messages"],
+            "sources": [{
+                "document_id": doc.metadata.get("document_id"),
+                "filename": doc.metadata.get("source"),
+                "page": doc.metadata.get("page"),
+                "total_pages": doc.metadata.get("total_pages"),
+                "excerpt": doc.page_content[:200] + "..."  # Preview
+                }
+                for doc in result.get("documents", [])
+                ]
         }
 
     async def query_streaming(self,message: str, conversation_state: Optional[State]=None, thread_id: str = None):
@@ -251,6 +274,15 @@ class InferenceEngine:
             "type": "final_state",
             "thread_id": thread_id,
             "messages": final_snapshot.values["messages"],
+            "sources": [{
+                "document_id": doc.metadata.get("document_id"),
+                "filename": doc.metadata.get("source"),
+                "page": doc.metadata.get("page"),
+                "total_pages": doc.metadata.get("total_pages"),
+                "excerpt": doc.page_content[:200] + "..."  # Preview
+                }
+                for doc in final_snapshot.values.get("documents", [])
+                ],
             "state":messages_to_dict(state['messages'])
         }
 
@@ -268,14 +300,14 @@ class InferenceEngine:
     def route_question(self, state: State) -> State:
         """Decide whether to retrieve or answer directly"""
         messages = [{"role":"system", "content": ROUTER_PROMPT}] + state["messages"]
-        response = self.response_model.bind_tools([self.retrieve_tool]).invoke(messages)
+        response = self.response_model.bind_tools([self.retrieval_tool]).invoke(messages)
         # Force empty content if no tool was called
         if not hasattr(response, 'tool_calls') or not response.tool_calls:
             response.content = ""
 
-        return {"messages": [response]}
+        return {"messages": [response], "documents" : state["documents"], "rewrite_count": state.get("rewrite_count", 0)}
 
-    def grade_documents(self, state: State) -> Literal["generate_answer", "rewrite_question"]:
+    def grade_documents(self, state: State) -> Literal["generate_answer", "rewrite_question", "direct_answer"]:
         """Determine whether the retrieved documents are relevant to the question."""
         question, context = self._get_current_question_and_context(state)
 
@@ -288,6 +320,8 @@ class InferenceEngine:
 
         if score == "yes":
             return "generate_answer"
+        elif state.get("rewrite_count", 0) >= 5:
+            return "direct_answer"
         else:
             return "rewrite_question"
 
@@ -296,7 +330,7 @@ class InferenceEngine:
         system_prompt = DIRECT_RESPONSE_PROMPT
         messages = [{"role": "system", "content": system_prompt}] + state["messages"]
         response = self.response_model.invoke(messages)
-        return {"messages": [response]}
+        return {"messages": [response], "documents" : state["documents"], "rewrite_count": state.get("rewrite_count", 0)}
 
     def rewrite_question(self,state: State) -> State:
         """Rewrite the original user question."""
@@ -304,7 +338,7 @@ class InferenceEngine:
         question, _ = self._get_current_question_and_context(state)
         prompt = REWRITE_PROMPT.format(question=question)
         response = self.response_model.invoke([{"role": "user", "content": prompt}])
-        return {"messages": [HumanMessage(content=response.content)]}
+        return {"messages": [HumanMessage(content=response.content)], "documents" : state["documents"], "rewrite_count": state.get("rewrite_count", 0)}
 
     def generate_answer(self,state: State) -> State:
         """Generate the answer using context only from currently active question."""
@@ -314,7 +348,7 @@ class InferenceEngine:
 
         message = self._prepare_message_content(state,prompt) # This will modify the prompt depending on whether user wants to send conversation history or not.
         response = self.response_model.invoke(message)
-        return {"messages": [response]}
+        return {"messages": [response], "documents" : state["documents"], "rewrite_count": state.get("rewrite_count", 0)}
 
     def _get_current_question_and_context(self, state: State) -> Tuple[str, str]:
         messages = state["messages"] # Check to find the latest human message - prevent retrieval leak from previous interactions
@@ -330,6 +364,17 @@ class InferenceEngine:
         context = recent_tool_messages[-1].content if recent_tool_messages else ""
         return question, context
 
+    def _define_retriever(self):
+        @tool
+        def retrieve(query: str) -> str:
+            """Retrieve relevant documents from the knowledge base.
+
+            Args:
+                query: The search query to find relevant documents
+            """
+            return ""
+        self.retrieval_tool = retrieve
+
     def _build_graph(self) -> StateGraph:
         """
         Build the graph for the agent - does not compile yet; we want to compile later.
@@ -338,7 +383,7 @@ class InferenceEngine:
         workflow = StateGraph(State)
 
         workflow.add_node("router",self.route_question)
-        workflow.add_node("retrieve", ToolNode([self.retrieve_tool]))
+        workflow.add_node("retrieve", self.retrieve_tool)
         workflow.add_node("rewrite_question", self.rewrite_question)
         workflow.add_node("generate_answer",self.generate_answer)
         workflow.add_node("direct_answer", self.direct_answer)
@@ -352,6 +397,7 @@ class InferenceEngine:
                                        },)
         workflow.add_conditional_edges("retrieve", self.grade_documents)
         workflow.add_edge("generate_answer", END)
+        workflow.add_edge("direct_answer", END)
         workflow.add_edge("rewrite_question", "router")
         return workflow # Returns uncompiled for compilation with checkpointer
 

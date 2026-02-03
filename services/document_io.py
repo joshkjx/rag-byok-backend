@@ -1,11 +1,15 @@
 import uuid
 
 from langchain_core.documents import Document
+from pathlib import Path
+import re
 from sqlalchemy.ext.asyncio import AsyncSession
-from fastapi import Depends, HTTPException, APIRouter, UploadFile, File, Form
+from fastapi import Depends, HTTPException, APIRouter, UploadFile, File, Form, Request
 from services.file_management_utils import get_file_client, FileIOClient
 from pydantic import BaseModel
+from services.dependencies.rate_limiter import limiter
 import logging
+import pymupdf
 
 from services.doc_processing import load_and_split_uploaded_document
 from services.vectorstore import create_vectorstore, VStore
@@ -21,15 +25,43 @@ class DeleteDocumentRequest(BaseModel):
     document_id: int
 
 @router.get('/get')
-async def get_user_docs(user = Depends(auth.get_current_user), db = Depends(db.get_db_session)): # Dependency injection should handle the cookie extraction
+@limiter.limit("30/minute")
+async def get_user_docs(request:Request, user = Depends(auth.get_current_user), db = Depends(db.get_db_session)): # Dependency injection should handle the cookie extraction
     return await retrieve_document_list(user, db)
 
 @router.post('/upload')
-async def upload_new_document(user = Depends(auth.get_current_user),
+@limiter.limit("30/minute")
+async def upload_new_document(request:Request,
+                              user = Depends(auth.get_current_user),
                               db_session: AsyncSession = Depends(db.get_db_session),
                               file: UploadFile = File(...),
                               file_content_type: str = Form(...),
                               client: FileIOClient = Depends(get_file_client)):
+    # Limiting upload size (supa has a 50mb limit anyway)
+    MAX_SIZE = 50 * 1024 * 1024  # 50MB
+
+    content = await file.read(MAX_SIZE + 1)
+    if len(content) > MAX_SIZE:
+        raise HTTPException(413, "File too large")
+
+    try:
+        doc = pymupdf.open(stream=content, filetype="pdf")
+
+        # Check for embedded files (potential malware vector)
+        if doc.embfile_count() > 0:
+            raise ValueError("PDFs with embedded files not supported")
+
+        test_page_count = doc.page_count
+        doc.close()
+        if test_page_count == 0:
+            raise ValueError("PDF has no pages")
+    except Exception as e:
+        logger.error(f"Invalid PDF upload from user {user}: {str(e)}")
+        raise HTTPException(400, {"message": f"Invalid or unsupported PDF upload from user {user}",
+                                  "error_code": "INVALID_PDF_CONTENT"})
+
+    await file.seek(0)
+
     try:
         upload_info = await _upload_document(
                            uid=user,
@@ -43,12 +75,14 @@ async def upload_new_document(user = Depends(auth.get_current_user),
     return upload_info
 
 @router.delete('/delete')
-async def delete_document(request:DeleteDocumentRequest,
+@limiter.limit("30/minute")
+async def delete_document(request: Request,
+                          d_req: DeleteDocumentRequest,
                           user = Depends(auth.get_current_user),
                           db_session: AsyncSession = Depends(db.get_db_session),
                           client: FileIOClient = Depends(get_file_client)):
 
-    document_id = request.document_id
+    document_id = d_req.document_id
 
     await _delete_document(uid=user,
                            document_id = document_id,
@@ -105,7 +139,8 @@ async def _upload_document(uid:int, file: UploadFile, file_content_type: str, db
 
     file_ext = ".pdf" if content_type in ["application/pdf","document/pdf"] else None
 
-    filename = file.filename
+    original_filename = file.filename
+    filename = sanitize_filename(original_filename)
 
     document = await db.retrieve_document_info(uid, filename, db_session) # Duplication check
     if document:
@@ -197,3 +232,19 @@ async def _delete_document(uid:int, document_id:int, db_session:AsyncSession, cl
                     "storage_path": document.storage_path,
                 }
             )
+
+
+def sanitize_filename(filename: str) -> str:
+    """
+    Sanitize a filename for safe storage and display
+    """
+    filename = Path(filename).name
+
+    filename = re.sub(r'[^\w\s\-\.]', '_', filename) #remove dangerous characters
+    filename = filename.strip('. ')
+    filename = re.sub(r'[\s_]+', '_', filename) #collapse spaces and underscores
+
+    if not filename:
+        filename = "unnamed_file.pdf"
+
+    return filename

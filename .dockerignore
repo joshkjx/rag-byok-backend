@@ -1,5 +1,7 @@
 chroma_test/
 documents_test/
+secrets/
+evaluation_results/
 .venv/
 .idea/
 *.sqlite
